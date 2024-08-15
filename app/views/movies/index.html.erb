@@ -3,6 +3,8 @@
 
 <!-- Checkboxes to filter movies by rating -->
 <%= form_tag movies_path, method: :get, id: 'ratings_form' do %>
+  <%= hidden_field_tag :sort, params[:sort] %>
+
   Include:
   <% @all_ratings.each do |rating| %>
     <div class="form-check  form-check-inline">
@@ -14,34 +16,39 @@
 <% end %>
 
 
-<%#  Part 2: Start here... %>
+<%#  Sorting column and adding background colour %>
 
 <table class="table table-striped col-md-12" id="movies">
   <thead>
-    <tr>
-      <th>Movie Title</th>
-      <th>Rating</th>
-      <th>Release Date</th>
-      <th>More Info</th>
-    </tr>
+  <tr>
+    <th class="<%= @title_sort_header %>">
+      <%= link_to 'Movie Title', movies_path(sort: 'title', ratings: params[:ratings]), id: 'title_header' %>
+    </th>
+    <th>Rating</th>
+    <th class="<%= @release_date_sort_header %>">
+      <%= link_to 'Release Date', movies_path(sort: 'release_date', ratings: params[:ratings]), id: 'release_date_header' %>
+    </th>
+    <th>More Info</th>
+  </tr>
   </thead>
   <tbody>
-    <% @movies.each do |movie| %>
-      <tr>
-        <td>
-          <%= movie.title %>
-        </td>
-        <td>
-          <%= movie.rating %>
-        </td>
-        <td>
-          <%= movie.release_date %>
-        </td>
-        <td>
-          <%= link_to "More about #{movie.title}", movie_path(movie) %>
-        </td>
-      </tr>
-    <% end %>
+  <% @movies.each do |movie| %>
+    <tr>
+      <td>
+        <%= movie.title %>
+      </td>
+      <td>
+        <%= movie.rating %>
+      </td>
+      <td>
+        <%= movie.release_date %>
+      </td>
+      <td>
+        <%= link_to "More about #{movie.title}", movie_path(movie) %>
+      </td>
+    </tr>
+  <% end %>
   </tbody>
 </table>
+
 <%= link_to 'Add new movie', new_movie_path, :class => 'btn btn-primary' %>
