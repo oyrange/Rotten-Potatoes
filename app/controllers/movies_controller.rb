@@ -8,19 +8,21 @@ class MoviesController < ApplicationController
 
     def index
       @all_ratings = Movie.possible_ratings
-      if params[:ratings]
-        @ratings_to_show = params[:ratings].keys
+
+      if params[:sort] or params[:ratings]
+        @ratings_to_show = params[:ratings] ? params[:ratings].keys : @all_ratings
+        @sort_column = params[:sort] # or session[:sort]
+
+        ## update session cookies
+        session[:sort] = @sort_column
+        session[:ratings] = @ratings_to_show
       else
-        @ratings_to_show = @all_ratings
+        @ratings_to_show = session[:ratings] or @all_ratings
+        @sort_column = session[:sort]
       end
       @movies = Movie.get_movies_rated(@ratings_to_show)
+      @movies = @movies.order(@sort_column) if @sort_column
 
-      if params[:sort]
-        @sort_column = params[:sort]
-        @movies = @movies.order(@sort_column)
-      end
-
-      # @orange_header = 'hilite bg-warning'
       @title_sort_header = 'hilite bg-warning' if @sort_column == 'title'
       @release_date_sort_header = 'hilite bg-warning' if @sort_column == 'release_date'
     end
