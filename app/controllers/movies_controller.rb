@@ -11,7 +11,7 @@ class MoviesController < ApplicationController
 
       if params[:sort] or params[:ratings]
         @ratings_to_show = params[:ratings] ? params[:ratings].keys : @all_ratings
-        @sort_column = params[:sort] # or session[:sort]
+        @sort_column = params[:sort] or session[:sort]
 
         ## update session cookies
         session[:sort] = @sort_column
