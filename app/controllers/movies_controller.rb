@@ -17,7 +17,7 @@ class MoviesController < ApplicationController
         session[:sort] = @sort_column
         session[:ratings] = @ratings_to_show
       else
-        @ratings_to_show = session[:ratings] or @all_ratings
+        @ratings_to_show = session[:ratings] ? session[:ratings] : @all_ratings
         @sort_column = session[:sort]
       end
       @movies = Movie.get_movies_rated(@ratings_to_show)
